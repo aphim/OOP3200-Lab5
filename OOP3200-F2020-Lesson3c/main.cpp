@@ -1,5 +1,8 @@
 #include <iomanip>
 #include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include <map>
 
 
 #include "Vector2D.h"
@@ -13,7 +16,7 @@ int main()
 		/************************
 		 *	DECLARATIONS
 		 ************************/
-
+		std::map<std::string, Vector2D<int>*> filePoints;
 
 
 		
@@ -28,8 +31,45 @@ int main()
 		 *	the correct format. Only continue processing if the file was opened and the
 		 *	map is not empty.
 		 ******************************************************************************/
+		std::ifstream infile;
+		std::string fileName;
 
-		
+		std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)"<<std::endl;
+		std::cin >> fileName;
+
+		infile.open(fileName.c_str());
+
+		if (infile.is_open())
+		{
+			float x, y;
+			std::string name;
+
+			while (!infile.fail())
+			{
+				infile >> name;
+				infile.ignore(1, ' ');
+				infile.ignore(1, '(');
+				infile >> x;
+				infile.ignore(1, ',');
+				infile.ignore(1, ' ');
+				infile >> y;
+				infile.ignore(1, ')');
+
+				auto* temp_object = new Vector2D<int>(x, y);
+
+				filePoints[name] = temp_object;
+			}
+			infile.close();
+		}
+		//Output data points from file for testing purposes
+		std::cout << "\n---------------------------------" << std::endl;
+		for (const auto& data_points : filePoints)
+		{
+			std::cout << "Name  : " << data_points.first << std::endl;
+			std::cout << "Value: ";
+			std::cout << data_points.second->ToString() << std::endl;
+			std::cout << "---------------------------------" << std::endl;
+		}
 
 		/******************************************************************************
 		 *	Determine the Total Distance Between All Points in Order:
