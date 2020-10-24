@@ -22,8 +22,8 @@ int main()
 		std::string fileName;
 		bool flag = false;
 
-	
-		
+
+
 		/******************************************************************************
 		 *	Reading Labels/Points into the Map:
 		 *	Attempt to open the data file.  If the data file opens, read a label,
@@ -61,7 +61,7 @@ int main()
 					infile.ignore(1, ' ');
 					infile.ignore(1, '(');
 					char textx = infile.peek();
-					if (textx != ' '&& infile.peek() != EOF && isalpha(textx)==false)
+					if (textx != ' ' && infile.peek() != EOF && isalpha(textx) == false)
 					{
 						infile >> x;
 					}
@@ -75,7 +75,7 @@ int main()
 					if (texty != ' ' && infile.peek() != EOF && isalpha(texty) == false)
 					{
 						infile >> y;
-	
+
 					}
 					else
 					{
@@ -94,7 +94,7 @@ int main()
 					}
 				}
 				infile.close();
-				
+
 				if (!filePoints.empty())
 				{
 					//Output data points from file for testing purposes
@@ -108,7 +108,7 @@ int main()
 					}
 					flag = true;
 				}
-				
+
 				else
 				{
 					std::system("cls");
@@ -140,12 +140,12 @@ int main()
 		 *	objects, so you should not need to use any complicated math here.  Report
 		 *	to the user how many points the map contains and what the total distance is.
 		 ******************************************************************************/
-		
+
 		float totalDistance = 0.0f;
 		//for loops through the points in the map
 		for (auto& data_points : filePoints)
 		{
-	
+
 
 			auto cit = filePoints.find(data_points.first);
 			auto it = std::next(filePoints.find(data_points.first), 1);
@@ -159,16 +159,16 @@ int main()
 			{
 				std::cout << "Total distance: " << totalDistance << std::endl;
 			}
-		
-		/******************************************************************************
-		 *	Determine the Distance Between the Start Point and a User Selected Point:
-		 *	Prompt the user to enter a label or to enter "quit" to end.  If the user
-		 *	entered anything other than "quit", attempt to find the label they entered
-		 *	in the map. If it was found, report the distance between the point for the
-		 *	label they entered and the start point (i.e. the point labeled "AA").
-		 *	Otherwise, tell the user that the label they entered is not in the map.
-		 *	Repeat these steps until the user enters "quit".
-		 ******************************************************************************/
+		}
+			/******************************************************************************
+			 *	Determine the Distance Between the Start Point and a User Selected Point:
+			 *	Prompt the user to enter a label or to enter "quit" to end.  If the user
+			 *	entered anything other than "quit", attempt to find the label they entered
+			 *	in the map. If it was found, report the distance between the point for the
+			 *	label they entered and the start point (i.e. the point labeled "AA").
+			 *	Otherwise, tell the user that the label they entered is not in the map.
+			 *	Repeat these steps until the user enters "quit".
+			 ******************************************************************************/
 			bool userInputFlag = false;
 			float distanceFromStart;
 			std::string userInput;
@@ -176,7 +176,7 @@ int main()
 			{
 				std::cout << "\nEnter the label of the point you wish to go to (\"quit\" to end): ";
 				std::cin >> userInput;
-				
+
 				if (userInput == "quit" || userInput == "Quit" || userInput == "QUIT")
 				{
 					userInputFlag = true;
@@ -191,23 +191,26 @@ int main()
 					}
 					else
 					{
-						std::cout << "\nThere is no point labelled \"" << userInput << "\" in the map."<<std::endl;
+						std::cout << "\nThere is no point labelled \"" << userInput << "\" in the map." << std::endl;
 					}
 				}
 			}
+		
+		/******************************************************************************
+		 *	Exception Handling:
+		 *	Catch any std::exception thrown. Report to the user that a run-time error
+		 *	occurred and show what exception was thrown.
+		 ******************************************************************************/
 	}
-	/******************************************************************************
-	 *	Exception Handling:
-	 *	Catch any std::exception thrown. Report to the user that a run-time error
-	 *	occurred and show what exception was thrown.
-	 ******************************************************************************/
-	catch (...)  // an exception was thrown
-	{
+		catch (...)  // an exception was thrown
+		{
 
-	}
+		}
 
 
-	// END-OF-PROGRAM
+		// END-OF-PROGRAM
 
+	
+	
 	return 0;
 }
