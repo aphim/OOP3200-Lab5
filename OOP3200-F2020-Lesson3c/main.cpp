@@ -143,20 +143,25 @@ int main()
 
 		float totalDistance = 0.0f;
 		int counter = 1;
+		
 		//for loops through the points in the map
 		for (auto& data_points : filePoints)
 		{
 
-
-			auto cit = filePoints.find(data_points.first);
-			auto it = std::next(filePoints.find(data_points.first), 1);
-			if (cit != filePoints.end() && it != filePoints.end())
+			//iterator that gets the current key
+			auto point1itr = filePoints.find(data_points.first);
+			//iterator that gets the key of the point after the current point
+			auto point2itr = std::next(filePoints.find(data_points.first), 1);
+			//runs if the iterator is not at the end of the map.
+			if (point1itr != filePoints.end() && point2itr != filePoints.end())
 			{
 				counter++;
-				auto distance = Vector2D<int> ::Distance(cit->second, it->second);
+				//call distance function in variable and send in the Vector2D value for the first and second points
+				auto distance = Vector2D<int> ::Distance(point1itr->second, point2itr->second);
 				totalDistance += distance;
-				std::cout << " Distance between "<< cit->first <<" and " << it->first << " is: " << std::setprecision(3) << std::fixed <<distance << "." << std::endl;
+				std::cout << " Distance between "<< point1itr->first <<" and " << point2itr->first << " is: " << std::setprecision(3) << std::fixed <<distance << "." << std::endl;
 			}
+			//run when the map has finished looping.
 			else
 			{
 				
@@ -196,7 +201,7 @@ int main()
 					}
 					else
 					{
-						std::cout << "\nThere is no point labelled \"" << userInput << "\" in the map." << std::endl;
+						std::cout << "\nThere is no point labeled \"" << userInput << "\" in the map." << std::endl;
 					}
 				}
 			}
@@ -207,9 +212,9 @@ int main()
 		 *	occurred and show what exception was thrown.
 		 ******************************************************************************/
 	}
-		catch (...)  // an exception was thrown
+		catch (std::exception e)  // an exception was thrown
 		{
-
+			std::cout << "Runtime error: " << e.what();
 		}
 
 
