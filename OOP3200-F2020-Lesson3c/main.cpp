@@ -142,6 +142,7 @@ int main()
 		 ******************************************************************************/
 
 		float totalDistance = 0.0f;
+		int counter = 1;
 		//for loops through the points in the map
 		for (auto& data_points : filePoints)
 		{
@@ -151,13 +152,17 @@ int main()
 			auto it = std::next(filePoints.find(data_points.first), 1);
 			if (cit != filePoints.end() && it != filePoints.end())
 			{
+				counter++;
 				auto distance = Vector2D<int> ::Distance(cit->second, it->second);
 				totalDistance += distance;
-				std::cout << " points for a total distance of " << std::to_string(distance) << "." << std::endl;
+				std::cout << " Distance between "<< cit->first <<" and " << it->first << " is: " << std::setprecision(3) << std::fixed <<distance << "." << std::endl;
 			}
 			else
 			{
-				std::cout << "Total distance: " << totalDistance << std::endl;
+				
+				std::cout << "\nThe map contains " << std::to_string(counter) << " points for a total distance of " << totalDistance << "."<< std::endl;
+				std::cout << "\n-----------------------------------------------------------" << std::endl;
+				
 			}
 		}
 			/******************************************************************************
