@@ -17,7 +17,7 @@ int main()
 		/************************
 		 *	DECLARATIONS
 		 ************************/
-		std::map<std::string, Vector2D<int>*> filePoints;
+		std::map<std::string, Vector2D<int>> filePoints;
 		std::ifstream infile;
 		std::string fileName;
 		bool flag = false;
@@ -87,7 +87,7 @@ int main()
 					{
 						if (name.length() == 2)
 						{
-							auto* temp_object = new Vector2D<int>(x, y);
+							auto temp_object = Vector2D<int>(x, y);
 
 							filePoints[name] = temp_object;
 						}
@@ -103,7 +103,7 @@ int main()
 					{
 						std::cout << "Name  : " << data_points.first << std::endl;
 						std::cout << "Value: ";
-						std::cout << data_points.second->ToString() << std::endl;
+						std::cout << data_points.second.ToString() << std::endl;
 						std::cout << "---------------------------------" << std::endl;
 					}
 					flag = true;
@@ -151,7 +151,7 @@ int main()
 			}
 			//outputs the results into the console
 			std::cout << std::fixed << std::setprecision(1);
-			std::cout << " The map contains " << counter;
+			std::cout << "The map contains " << counter;
 			std::cout << " points for a total distance of " << pointDistance << "." << std::endl;
 		
 		/******************************************************************************
@@ -163,7 +163,32 @@ int main()
 		 *	Otherwise, tell the user that the label they entered is not in the map.
 		 *	Repeat these steps until the user enters "quit".
 		 ******************************************************************************/
-
+			bool userInputFlag = false;
+			float distanceFromStart;
+			std::string userInput;
+			while (userInputFlag == false)
+			{
+				std::cout << "\nEnter the label of the point you wish to go to (\"quit\" to end): ";
+				std::cin >> userInput;
+				
+				if (userInput == "quit" || userInput == "Quit" || userInput == "QUIT")
+				{
+					userInputFlag = true;
+				}
+				else
+				{
+					auto searchKey = filePoints.find(userInput);
+					if (searchKey != filePoints.end())
+					{
+						distanceFromStart = Vector2D<int>::Distance(filePoints["AA"], filePoints[userInput]);
+						std::cout << "\nThe distance between AA " << filePoints.at("AA") << " and " << userInput << " " << filePoints.at(userInput) << " is " << distanceFromStart << std::endl;
+					}
+					else
+					{
+						std::cout << "\nThere is no point labelled \"" << userInput << "\" in the map."<<std::endl;
+					}
+				}
+			}
 	}
 	/******************************************************************************
 	 *	Exception Handling:
