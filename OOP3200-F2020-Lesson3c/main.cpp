@@ -40,7 +40,7 @@ int main()
 		while (flag == false)
 		{
 			//Prompt for entering file name
-			std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)" << std::endl;
+			std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt, PointData.dat)" << std::endl;
 			//receive file name
 			std::cin >> fileName;
 			bool errorFlag = false;
