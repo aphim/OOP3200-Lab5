@@ -20,6 +20,9 @@ int main()
 		std::map<std::string, Vector2D<int>*> filePoints;
 		std::ifstream infile;
 		std::string fileName;
+		bool flag = false;
+
+	
 		
 		/******************************************************************************
 		 *	Reading Labels/Points into the Map:
@@ -33,13 +36,14 @@ int main()
 		 *	map is not empty.
 		 ******************************************************************************/
 
-		 //Prompt for entering file name
-		std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)" << std::endl;
 
-		while (filePoints.empty())
+		while (flag == false)
 		{
-			//receive file name 
+			//Prompt for entering file name
+			std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)" << std::endl;
+			//receive file name
 			std::cin >> fileName;
+			bool errorFlag = false;
 
 			//opens the file of the entered file name
 			infile.open(fileName.c_str());
@@ -47,8 +51,8 @@ int main()
 			if (infile.is_open())
 			{
 				//creates variables
-				float x, y;
 				std::string name;
+				int x, y;
 
 				//while loop for retrieving points from the document
 				while (!infile.fail())
@@ -56,32 +60,74 @@ int main()
 					infile >> name;
 					infile.ignore(1, ' ');
 					infile.ignore(1, '(');
-					infile >> x;
+					char textx = infile.peek();
+					if (textx != ' '&& infile.peek() != EOF && isalpha(textx)==false)
+					{
+						infile >> x;
+					}
+					else
+					{
+						errorFlag = true;
+					}
 					infile.ignore(1, ',');
 					infile.ignore(1, ' ');
-					infile >> y;
+					char texty = infile.peek();
+					if (texty != ' ' && infile.peek() != EOF && isalpha(texty) == false)
+					{
+						infile >> y;
+	
+					}
+					else
+					{
+						errorFlag = true;
+					}
 					infile.ignore(1, ')');
 
-					auto* temp_object = new Vector2D<int>(x, y);
+					if (errorFlag == false)
+					{
+						if (name.length() == 2)
+						{
+							auto* temp_object = new Vector2D<int>(x, y);
 
-					filePoints[name] = temp_object;
+							filePoints[name] = temp_object;
+						}
+					}
 				}
 				infile.close();
+				
+				if (!filePoints.empty())
+				{
+					//Output data points from file for testing purposes
+					std::cout << "\n---------------------------------" << std::endl;
+					for (const auto& data_points : filePoints)
+					{
+						std::cout << "Name  : " << data_points.first << std::endl;
+						std::cout << "Value: ";
+						std::cout << data_points.second->ToString() << std::endl;
+						std::cout << "---------------------------------" << std::endl;
+					}
+					flag = true;
+				}
+				
+				else
+				{
+					std::system("cls");
+					std::cout << "The map is empty. Check that the file contains valid data in the correct format." << std::endl;
+					std::cout << "\n-----------------------------------------------------------" << std::endl;
+					std::system("pause");
+					flag = false;
+					std::system("cls");
+				}
 			}
-			if (filePoints.empty())
+			else
 			{
-				std::cout << "Please enter a valid text file." << std::endl;
+				std::system("cls");
+				std::cout << fileName << " could not be opened for input. Check that the file exists." << std::endl;
+				std::cout << "\n-----------------------------------------------------------" << std::endl;
+				std::system("pause");
+				flag = false;
+				std::system("cls");
 			}
-			
-		}
-		//Output data points from file for testing purposes
-		std::cout << "\n---------------------------------" << std::endl;
-		for (const auto& data_points : filePoints)
-		{
-			std::cout << "Name  : " << data_points.first << std::endl;
-			std::cout << "Value: ";
-			std::cout << data_points.second->ToString() << std::endl;
-			std::cout << "---------------------------------" << std::endl;
 		}
 
 		/******************************************************************************
@@ -89,25 +135,24 @@ int main()
 		 *	Use an iterator and a loop to traverse each label/point in the map. For
 		 *	each label/point, determine the distance from that point to the previous
 		 *	point (or next point depending on how you implement this) and add that
-		 *	distance to a total.  Note that the Vector2D class includes a static 
+		 *	distance to a total.  Note that the Vector2D class includes a static
 		 *	distance function to determine the distance between two Vector2D
 		 *	objects, so you should not need to use any complicated math here.  Report
 		 *	to the user how many points the map contains and what the total distance is.
 		 ******************************************************************************/
-		int counter = 0;
-		double pointDistance = 0.0;
-		//for loops through the points in the map
-		for (const auto& data_points : filePoints)
-		{
-			data_points.second->Set();
-			
-		//pointDistance += Vector2D<int>::Distance(, filePoints["AB"]);
-		counter++;
-		}
-		//outputs the results into the console
-		std::cout << std::fixed << std::setprecision(3);
-		std::cout << "There are " << counter << " points in the map."<<std::endl;
-		std::cout << "The total distance traveled is " << pointDistance << "." << std::endl;
+		
+			int counter = 0;
+			double pointDistance = 0.0;
+			//for loops through the points in the map
+			for (const auto& data_points : filePoints)
+			{
+				//pointDistance += Vector2D<int>::Distance(, filePoints["AB"]);
+				counter++;
+			}
+			//outputs the results into the console
+			std::cout << std::fixed << std::setprecision(1);
+			std::cout << " The map contains " << counter;
+			std::cout << " points for a total distance of " << pointDistance << "." << std::endl;
 		
 		/******************************************************************************
 		 *	Determine the Distance Between the Start Point and a User Selected Point:
@@ -118,20 +163,20 @@ int main()
 		 *	Otherwise, tell the user that the label they entered is not in the map.
 		 *	Repeat these steps until the user enters "quit".
 		 ******************************************************************************/
-		
+
 	}
 	/******************************************************************************
 	 *	Exception Handling:
 	 *	Catch any std::exception thrown. Report to the user that a run-time error
 	 *	occurred and show what exception was thrown.
 	 ******************************************************************************/
-	catch(...)  // an exception was thrown
+	catch (...)  // an exception was thrown
 	{
-		
+
 	}
 
+
 	// END-OF-PROGRAM
-	
+
 	return 0;
 }
-
