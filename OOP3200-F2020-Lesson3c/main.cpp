@@ -1,3 +1,4 @@
+
 #include <iomanip>
 #include <iostream>
 #include <cstdlib>
@@ -17,8 +18,8 @@ int main()
 		 *	DECLARATIONS
 		 ************************/
 		std::map<std::string, Vector2D<int>*> filePoints;
-
-
+		std::ifstream infile;
+		std::string fileName;
 		
 		/******************************************************************************
 		 *	Reading Labels/Points into the Map:
@@ -31,35 +32,47 @@ int main()
 		 *	the correct format. Only continue processing if the file was opened and the
 		 *	map is not empty.
 		 ******************************************************************************/
-		std::ifstream infile;
-		std::string fileName;
 
-		std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)"<<std::endl;
-		std::cin >> fileName;
+		 //Prompt for entering file name
+		std::cout << "Please enter text file to retrieve data from. (eg: MockDataForTesting.txt)" << std::endl;
 
-		infile.open(fileName.c_str());
-
-		if (infile.is_open())
+		while (filePoints.empty())
 		{
-			float x, y;
-			std::string name;
+			//receive file name 
+			std::cin >> fileName;
 
-			while (!infile.fail())
+			//opens the file of the entered file name
+			infile.open(fileName.c_str());
+
+			if (infile.is_open())
 			{
-				infile >> name;
-				infile.ignore(1, ' ');
-				infile.ignore(1, '(');
-				infile >> x;
-				infile.ignore(1, ',');
-				infile.ignore(1, ' ');
-				infile >> y;
-				infile.ignore(1, ')');
+				//creates variables
+				float x, y;
+				std::string name;
 
-				auto* temp_object = new Vector2D<int>(x, y);
+				//while loop for retrieving points from the document
+				while (!infile.fail())
+				{
+					infile >> name;
+					infile.ignore(1, ' ');
+					infile.ignore(1, '(');
+					infile >> x;
+					infile.ignore(1, ',');
+					infile.ignore(1, ' ');
+					infile >> y;
+					infile.ignore(1, ')');
 
-				filePoints[name] = temp_object;
+					auto* temp_object = new Vector2D<int>(x, y);
+
+					filePoints[name] = temp_object;
+				}
+				infile.close();
 			}
-			infile.close();
+			if (filePoints.empty())
+			{
+				std::cout << "Please enter a valid text file." << std::endl;
+			}
+			
 		}
 		//Output data points from file for testing purposes
 		std::cout << "\n---------------------------------" << std::endl;
@@ -81,9 +94,21 @@ int main()
 		 *	objects, so you should not need to use any complicated math here.  Report
 		 *	to the user how many points the map contains and what the total distance is.
 		 ******************************************************************************/
-
-				
-
+		int counter = 0;
+		double pointDistance = 0.0;
+		//for loops through the points in the map
+		for (const auto& data_points : filePoints)
+		{
+			data_points.second->Set();
+			
+		//pointDistance += Vector2D<int>::Distance(, filePoints["AB"]);
+		counter++;
+		}
+		//outputs the results into the console
+		std::cout << std::fixed << std::setprecision(3);
+		std::cout << "There are " << counter << " points in the map."<<std::endl;
+		std::cout << "The total distance traveled is " << pointDistance << "." << std::endl;
+		
 		/******************************************************************************
 		 *	Determine the Distance Between the Start Point and a User Selected Point:
 		 *	Prompt the user to enter a label or to enter "quit" to end.  If the user
