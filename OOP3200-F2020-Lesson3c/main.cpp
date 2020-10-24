@@ -141,18 +141,24 @@ int main()
 		 *	to the user how many points the map contains and what the total distance is.
 		 ******************************************************************************/
 		
-			int counter = 0;
-			double pointDistance = 0.0;
-			//for loops through the points in the map
-			for (const auto& data_points : filePoints)
+		float totalDistance = 0.0f;
+		//for loops through the points in the map
+		for (auto& data_points : filePoints)
+		{
+	
+
+			auto cit = filePoints.find(data_points.first);
+			auto it = std::next(filePoints.find(data_points.first), 1);
+			if (cit != filePoints.end() && it != filePoints.end())
 			{
-				//pointDistance += Vector2D<int>::Distance(, filePoints["AB"]);
-				counter++;
+				auto distance = Vector2D<int> ::Distance(cit->second, it->second);
+				totalDistance += distance;
+				std::cout << " points for a total distance of " << std::to_string(distance) << "." << std::endl;
 			}
-			//outputs the results into the console
-			std::cout << std::fixed << std::setprecision(1);
-			std::cout << "The map contains " << counter;
-			std::cout << " points for a total distance of " << pointDistance << "." << std::endl;
+			else
+			{
+				std::cout << "Total distance: " << totalDistance << std::endl;
+			}
 		
 		/******************************************************************************
 		 *	Determine the Distance Between the Start Point and a User Selected Point:
