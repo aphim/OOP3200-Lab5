@@ -1,3 +1,14 @@
+/** OOP3200. F2020. Main.cpp
+ *
+ * In this program, we create a map of data points on a coordinate grid.
+ * We then calculate the total distance traveled and allow the user to choose a 
+ * point and find the distance to the origin.
+ *
+* Author: Jacky Yuan, 100520106
+*         Ashok Sasitharan, 100745484
+* Date: Oct 24, 2020
+* Change Log: N/A
+*/
 
 #include <iomanip>
 #include <iostream>
@@ -60,6 +71,7 @@ int main()
 					infile >> name;
 					infile.ignore(1, ' ');
 					infile.ignore(1, '(');
+					//checks for empty space, alphabet characters, or end of page. Raises error flag if it is found.
 					char textx = infile.peek();
 					if (textx != ' ' && infile.peek() != EOF && isalpha(textx) == false)
 					{
@@ -71,6 +83,7 @@ int main()
 					}
 					infile.ignore(1, ',');
 					infile.ignore(1, ' ');
+					//checks for empty space, alphabet characters, or end of page. Raises error flag if it is found.
 					char texty = infile.peek();
 					if (texty != ' ' && infile.peek() != EOF && isalpha(texty) == false)
 					{
@@ -83,18 +96,21 @@ int main()
 					}
 					infile.ignore(1, ')');
 
+					//Checks if the error flag is raised
 					if (errorFlag == false)
 					{
+						//Checks if the name is the proper length
 						if (name.length() == 2)
 						{
+							//inserts the vector point into the map
 							auto temp_object = Vector2D<int>(x, y);
-
 							filePoints[name] = temp_object;
 						}
 					}
 				}
 				infile.close();
 
+				//checks if the map is empty
 				if (!filePoints.empty())
 				{
 					//Output data points from file for testing purposes
@@ -108,7 +124,7 @@ int main()
 					}
 					flag = true;
 				}
-
+				//error case if the map is empty.
 				else
 				{
 					std::system("cls");
@@ -119,6 +135,7 @@ int main()
 					std::system("cls");
 				}
 			}
+			//error case for if the file is not found.
 			else
 			{
 				std::system("cls");
@@ -164,7 +181,7 @@ int main()
 			//run when the map has finished looping.
 			else
 			{
-				
+		
 				std::cout << "\nThe map contains " << std::to_string(counter) << " points for a total distance of " << totalDistance << "."<< std::endl;
 				std::cout << "\n-----------------------------------------------------------" << std::endl;
 				
@@ -182,23 +199,30 @@ int main()
 			bool userInputFlag = false;
 			float distanceFromStart;
 			std::string userInput;
+	
 			while (userInputFlag == false)
 			{
+				//output prompt for user input
 				std::cout << "\nEnter the label of the point you wish to go to (\"quit\" to end): ";
 				std::cin >> userInput;
 
+				//Checks if the user wants to quit
 				if (userInput == "quit" || userInput == "Quit" || userInput == "QUIT")
 				{
 					userInputFlag = true;
 				}
 				else
 				{
+					//Searches the map for the inputted point
 					auto searchKey = filePoints.find(userInput);
+					//Checks if the search result is equal to the end of the map
 					if (searchKey != filePoints.end())
 					{
+						//outputs the distance from the origin to the point
 						distanceFromStart = Vector2D<int>::Distance(filePoints["AA"], filePoints[userInput]);
 						std::cout << "\nThe distance between AA " << filePoints.at("AA") << " and " << userInput << " " << filePoints.at(userInput) << " is " << distanceFromStart << std::endl;
 					}
+					//if the user inputted point is not found
 					else
 					{
 						std::cout << "\nThere is no point labeled \"" << userInput << "\" in the map." << std::endl;
